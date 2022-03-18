@@ -1,9 +1,14 @@
+import controllers.KFCController
 import java.lang.Character.toChars
 import javax.xml.stream.events.Characters
+import models.*
+import view.KFCView
 
 fun main(args: Array<String>) {
-    println("Hello World!")
+   var controlador : KFCController = KFCController
+var vista : KFCView = KFCView
 
-
-    println(Character.toChars(0x1F357))
+   controlador.init()
+   vista.showIngredientes()
+   vista.showProductos()
 }

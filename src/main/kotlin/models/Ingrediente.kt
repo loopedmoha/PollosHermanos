@@ -1,9 +1,9 @@
 package models
 
-class Ingrediente {
+class Ingrediente(var id: Int, var nombre: String) {
 
-
-    var id: Int = 0
-    var nombre: String = ""
+    override fun toString(): String {
+        return "Ingrediente(id=$id, nombre='$nombre')"
+    }
 
 }

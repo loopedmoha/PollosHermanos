@@ -3,7 +3,7 @@ package repositories
 import models.Ingrediente
 import resources.ICRUDRepository
 
-class IngredientesRepository(override val size: Int) : ICRUDRepository<Ingrediente>, ArrayList<Ingrediente>() {
+class IngredientesRepository(override var size: Int) : ICRUDRepository<Ingrediente>, ArrayList<Ingrediente>() {
     override fun findAll(): List<Ingrediente?>? {
         return this;
     }
@@ -19,6 +19,7 @@ class IngredientesRepository(override val size: Int) : ICRUDRepository<Ingredien
     override fun insert(entity: Ingrediente?): Ingrediente? {
         if (entity != null) {
             add(entity)
+            size++
         }
         return null
     }
@@ -40,6 +41,7 @@ class IngredientesRepository(override val size: Int) : ICRUDRepository<Ingredien
         if (ingrediente != null) {
 
             this.remove(ingrediente)
+            size--
             return ingrediente
         }
         return null
@@ -48,6 +50,7 @@ class IngredientesRepository(override val size: Int) : ICRUDRepository<Ingredien
     override fun delete(entity: Ingrediente?): Ingrediente? {
         if (entity != null) {
             remove(entity)
+            size--
             return entity;
         }
         return null

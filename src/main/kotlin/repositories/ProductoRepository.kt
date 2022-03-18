@@ -4,7 +4,7 @@ import models.Producto
 import resources.ICRUDRepository
 import java.util.*
 
-class MenuRepository : ICRUDRepository<Producto>, TreeMap<String, Producto>() {
+class ProductoRepository(override var size: Int) : ICRUDRepository<Producto>, TreeMap<String, Producto>() {
     /**
      * Encuentra todos los elementos del repositorio
      */
@@ -18,6 +18,7 @@ class MenuRepository : ICRUDRepository<Producto>, TreeMap<String, Producto>() {
     override fun insert(entity: Producto?): Producto? {
         if (entity != null) {
             this.put(entity.nombre, entity)
+            size++
             return entity
         }
         return null
@@ -61,6 +62,7 @@ class MenuRepository : ICRUDRepository<Producto>, TreeMap<String, Producto>() {
     }
 
     fun deleteByName(name: String): Producto? {
+        size--
         return this.remove(name)
     }
 
@@ -74,6 +76,7 @@ class MenuRepository : ICRUDRepository<Producto>, TreeMap<String, Producto>() {
             prod = get(entity.nombre)
         if (prod != null) {
             remove(prod.nombre)
+            size--
             return prod
         }
         return null
