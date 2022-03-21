@@ -9,6 +9,5 @@ fun main(args: Array<String>) {
 var vista : KFCView = KFCView
 
    controlador.init()
-   vista.showIngredientes()
-   vista.showProductos()
+   controlador.pollosHermanos()
 }

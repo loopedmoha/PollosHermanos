@@ -1,5 +1,6 @@
 package repositories
 
+import exceptions.EItemNotFound
 import models.Ingrediente
 import resources.ICRUDRepository
 
@@ -8,12 +9,26 @@ class IngredientesRepository(override var size: Int) : ICRUDRepository<Ingredien
         return this;
     }
 
+    fun findAll(ids : List<String>): List<Ingrediente?>? {
+        val lista = mutableListOf<Ingrediente>()
+        var aux : Ingrediente?
+        for(i in ids){
+            if(findById(i.toInt()) != null){
+                aux = findById(i.toInt())
+                lista.add(aux!!)
+            }else{
+                return null
+            }
+        }
+        return lista
+    }
+
     override fun findById(id: Int): Ingrediente? {
         for (ingrediente in this) {
             if (ingrediente.id == id)
                 return ingrediente
         }
-        return null;
+        throw  EItemNotFound("ELEMENTO NO ENCONTRADO")
     }
 
     override fun insert(entity: Ingrediente?): Ingrediente? {

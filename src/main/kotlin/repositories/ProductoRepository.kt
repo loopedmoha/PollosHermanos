@@ -1,5 +1,6 @@
 package repositories
 
+import exceptions.EItemNotFound
 import models.Producto
 import resources.ICRUDRepository
 import java.util.*
@@ -62,7 +63,12 @@ class ProductoRepository(override var size: Int) : ICRUDRepository<Producto>, Tr
     }
 
     fun deleteByName(name: String): Producto? {
-        size--
+        val prod : Producto? = this.remove(name)
+        if(prod == null) {
+            throw EItemNotFound("Producto $name no existe")
+        }else{
+            size--
+        }
         return this.remove(name)
     }
 

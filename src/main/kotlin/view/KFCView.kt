@@ -19,7 +19,25 @@ object KFCView {
     fun showIngrediente(ingrediente: Ingrediente) {
         println(ingrediente)
     }
+    fun menuUpdateProducto() : Int{
+        var opt : Int = 0
+        do{
+            println("1. Cambiar nombre")
+            println("2. Cambiar ingredientes")
+            opt = ReadData.readNumber()
+        }while(opt !in 1..2)
+        return opt
+    }
 
+    fun menuUpdateIngredientes() : Int{
+        var opt : Int = 0
+        do{
+            println("1. Añadir ingredientes")
+            println("2. Eliminar ingredientes")
+            opt = ReadData.readNumber()
+        }while(opt !in 1..2)
+        return opt
+    }
     fun menu(): Int {
         var opt: Int = 0
         do {
@@ -31,7 +49,7 @@ object KFCView {
             println("6. Elminiar ingrediente")
             println("7. Salir")
             opt = ReadData.readNumber()
-        } while (opt in 0..7)
+        } while (opt !in 0..7)
         return opt
     }
 }
