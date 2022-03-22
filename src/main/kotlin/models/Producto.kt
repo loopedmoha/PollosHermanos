@@ -1,7 +1,6 @@
 package models
 
 open class Producto(
-    var id: Int,
     var nombre: String,
     var precio: Int
 ) {
@@ -41,12 +40,23 @@ open class Producto(
         ingredientes.remove(ingrediente)
     }
 
-    fun deleteIngrediente(ingredientes: List<Ingrediente>) {
-TODO()
+    fun deleteIngrediente(ingList: List<Ingrediente?>?): List<Ingrediente>? {
+        if (ingList != null) {
+            for (ingrediente in ingList) {
+                if (this.containsIngrediente(ingrediente!!)) {
+                    ingredientes.remove(ingrediente)
+                } else {
+                    println("EL PRODUCTO NO CONTIENE $ingrediente")
+                    return null
+                }
+            }
+        } else
+            return null
+        return ingredientes
     }
 
     override fun toString(): String {
-        return "Producto(id=$id, nombre='$nombre', precio=$precio, ingredientes=$ingredientes)"
+        return "Producto(nombre='$nombre', precio=$precio, ingredientes=$ingredientes)"
     }
 
 }

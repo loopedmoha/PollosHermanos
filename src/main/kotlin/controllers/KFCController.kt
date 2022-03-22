@@ -1,5 +1,6 @@
 package controllers
 
+import exceptions.EIncorrectValue
 import exceptions.EItemNotFound
 import factories.Factory
 import models.Ingrediente
@@ -10,6 +11,8 @@ import repositories.IngredientesRepository
 import repositories.ProductoRepository
 import utils.ReadData
 import view.KFCView
+import view.KFCView.showIngredientes
+import view.KFCView.showProductos
 
 object KFCController {
     private var ingredientesRepo: IngredientesRepository = IngredientesRepository(0)
@@ -51,9 +54,11 @@ object KFCController {
                 4 -> updateIngrediente()
                 5 -> deleteProducto()
                 6 -> deleteIngrediente()
-
+                7 -> showProductos()
+                8 -> showIngredientes()
+                else -> opt = 9
             }
-        } while (opt != 7)
+        } while (opt != 9)
     }
 
     fun deleteProducto(): Producto? {
@@ -149,7 +154,7 @@ object KFCController {
         }
         val ingredientes = listOfIngredientes(ids)
         println("Vas a eliminar los ingredientes:\n $ingredientes")
-
+        aux.deleteIngrediente(ingredientes)
 
     }
 
@@ -167,17 +172,55 @@ object KFCController {
     }
 
     private fun listOfIngredientes(ids: List<String>): List<Ingrediente?>? {
-        val ingredientes = ingredientesRepo.findAll(ids)
-        return ingredientes
+        return ingredientesRepo.findAll(ids)
     }
 
 
     fun addIngrediente() {
-        TODO("Not yet implemented")
+        var id: String
+        val name: String
+        println("Ingredientes actuales: \n ${ingredientesRepo.findAll()}")
+        println("Introduce el nombre del nuevo ingrediente:")
+        name = ReadData.readString()
+        do {
+            println("Introduce id (numero entero) del nuevo ingrediente:")
+            try {
+                id = ReadData.readString("\\d+".toRegex())
+            } catch (e: EIncorrectValue) {
+                id = ""
+                println(e.message())
+            }
+        } while (id == "")
+        if (ingredientesRepo.findById(id.toInt()) != null) {
+            println("YA EXISTE UN INGREDIENTE CON ESE ID")
+        } else {
+            val aux = Ingrediente(id.toInt(), name)
+            ingredientesRepo.insert(aux)
+        }
+
+
     }
 
-    fun addProducto() {
-        TODO("Not yet implemented")
+    fun addProducto(): Producto? {
+        println("Introduce el nombre del nuevo producto:")
+        val name = ReadData.readString().uppercase()
+        val aux: Producto?
+
+        if (productosRepo.findByName(name) != null) {
+            println("Producto con el nombre $name ya existe.")
+            return null
+        } else {
+            println("Introduce un precio para el producto:")
+            var precio: Int = -1
+            do {
+                precio = ReadData.readNumber()
+            } while (precio == -1)
+
+            aux = Producto(name, precio)
+            addingrediente(aux)
+            return productosRepo.insert(aux)
+
+        }
     }
 
     fun getAllProductos(): List<Producto?>? {

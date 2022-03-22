@@ -5,19 +5,17 @@ import models.Ingrediente
 import resources.ICRUDRepository
 
 class IngredientesRepository(override var size: Int) : ICRUDRepository<Ingrediente>, ArrayList<Ingrediente>() {
-    override fun findAll(): List<Ingrediente?>? {
+    override fun findAll(): List<Ingrediente?> {
         return this;
     }
 
-    fun findAll(ids : List<String>): List<Ingrediente?>? {
+    fun findAll(ids: List<String>): List<Ingrediente?> {
         val lista = mutableListOf<Ingrediente>()
-        var aux : Ingrediente?
-        for(i in ids){
-            if(findById(i.toInt()) != null){
-                aux = findById(i.toInt())
-                lista.add(aux!!)
-            }else{
-                return null
+        var aux: Ingrediente?
+        for (i in ids) {
+            aux = findById(i.toInt())
+            if (aux != null) {
+                lista.add(aux)
             }
         }
         return lista
@@ -28,7 +26,7 @@ class IngredientesRepository(override var size: Int) : ICRUDRepository<Ingredien
             if (ingrediente.id == id)
                 return ingrediente
         }
-        throw  EItemNotFound("ELEMENTO NO ENCONTRADO")
+        return null
     }
 
     override fun insert(entity: Ingrediente?): Ingrediente? {
@@ -43,8 +41,8 @@ class IngredientesRepository(override var size: Int) : ICRUDRepository<Ingredien
         val ingrediente = this.indexOf(entity)
         if (ingrediente >= 0) {
             if (entity != null) {
-                this.set(ingrediente, entity)
-                return this.get(ingrediente)
+                this[ingrediente] = entity
+                return this[ingrediente]
             }
         }
         return null
@@ -52,14 +50,17 @@ class IngredientesRepository(override var size: Int) : ICRUDRepository<Ingredien
 
 
     override fun deleteById(id: Int): Ingrediente? {
-        val ingrediente = findById(id)
-        if (ingrediente != null) {
-
+        return try {
+            val ingrediente = findById(id)
             this.remove(ingrediente)
             size--
-            return ingrediente
+            ingrediente
+        } catch (e: EItemNotFound) {
+            println(e.message())
+            null
         }
-        return null
+
+
     }
 
     override fun delete(entity: Ingrediente?): Ingrediente? {

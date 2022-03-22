@@ -1,7 +1,7 @@
 package models
 
-class Postre(id: Int,
+class Postre(
              nombre: String, precio: Int) :
-    Producto(id,  nombre, precio) {
+    Producto( nombre, precio) {
         
 }

@@ -1,9 +1,10 @@
 package models
 
-class Bebida(id: Int, nombre: String, precio: Int) :
-Producto(
-id,
-nombre,
-precio) {
+class Bebida(nombre: String, precio: Int) :
+    Producto(
+
+        nombre,
+        precio
+    ) {
 
 }

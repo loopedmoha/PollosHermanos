@@ -47,9 +47,11 @@ object KFCView {
             println("4. Modificar Ingrediente")
             println("5. Eliminar producto")
             println("6. Elminiar ingrediente")
-            println("7. Salir")
+            println("7.Mostrar productos")
+            println("8.Mostrar ingredientes")
+            println("9. Salir")
             opt = ReadData.readNumber()
-        } while (opt !in 0..7)
+        } while (opt !in 0..9)
         return opt
     }
 }

@@ -26,11 +26,11 @@ object  Factory {
         nombre: String,
         precio: Int
     ): Producto? {
-        when (tipo) {
-            TipoProducto.BEBIDA -> return Bebida(id, nombre, precio)
-            TipoProducto.COMPLEMENTO -> return Complemento(id, nombre, precio)
-            TipoProducto.POSTRE -> return Postre(id, nombre, precio)
-            TipoProducto.PRINCIPAL -> return Principal(id, nombre, precio)
+        return when (tipo) {
+            TipoProducto.BEBIDA -> Bebida(nombre, precio)
+            TipoProducto.COMPLEMENTO -> Complemento(nombre, precio)
+            TipoProducto.POSTRE -> Postre(nombre, precio)
+            TipoProducto.PRINCIPAL -> Principal( nombre, precio)
 
         }
         return null
