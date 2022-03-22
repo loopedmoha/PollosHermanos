@@ -18,8 +18,11 @@ object KFCController {
     private var ingredientesRepo: IngredientesRepository = IngredientesRepository(0)
     private var productosRepo: ProductoRepository = ProductoRepository(0)
 
-
-    fun getAllIngredientes(): List<Ingrediente?>? {
+    /**
+     * Recupera todos los ingredientes del repositorio
+     * @return List<Ingrediente?>
+     */
+    fun getAllIngredientes(): List<Ingrediente?> {
         return ingredientesRepo.findAll()
     }
 
@@ -36,15 +39,18 @@ object KFCController {
         productosRepo.insert(Factory.create(TipoProducto.PRINCIPAL, 1, "Hamburguesa", 5))
         productosRepo.insert(Factory.create(TipoProducto.COMPLEMENTO, 2, "patatas fritas", 2))
 
-        var producto: Principal = productosRepo.findByName("Hamburguesa") as Principal
+        val producto: Principal = productosRepo.findByName("Hamburguesa") as Principal
         ingredientesRepo.findById(1)?.let { producto.addIngrediente(it) }
         ingredientesRepo.findById(2)?.let { producto.addIngrediente(it) }
         productosRepo.update(producto)
 
     }
 
+    /**
+     * Funcion principal del programa
+     */
     fun pollosHermanos() {
-        var opt: Int = 0
+        var opt = 0
         do {
             opt = KFCView.menu()
             when (opt) {
@@ -61,9 +67,13 @@ object KFCController {
         } while (opt != 9)
     }
 
+    /**
+     * Elimina un producto del repositorio
+     * @return Producto? null si el producto no existe. El producto si se elimina
+     */
     fun deleteProducto(): Producto? {
         println("Introduce nombre de producto:")
-        var name: String = ReadData.readString()
+        val name: String = ReadData.readString()
         if (productosRepo.findByName(name) != null) {
             return productosRepo.deleteByName(name)
         } else
@@ -72,6 +82,10 @@ object KFCController {
 
     }
 
+    /**
+     * Elimina un ingrediente del repositorio
+     * @return Ingrediente? null si no existe, el ingrediente si se elimina
+     */
     fun deleteIngrediente(): Ingrediente? {
 
         val regexNum = Regex("\\d+")
@@ -89,13 +103,18 @@ object KFCController {
         }
     }
 
+    /**
+     * Actualiza los datos de un ingrediente
+     * @return Ingrediente? null si el ingrediente no existe,
+     * el ingrediente si se modifica
+     */
     fun updateIngrediente(): Ingrediente? {
-        val regexNum = Regex("\\d+")
-        val id: Int = idPattern(regexNum)
+        
+        val id: Int =ReadData.readNumber()
         return if (ingredientesRepo.findById(id) != null) {
             println("Introduce nuevo nombre:")
             val newNombre = ReadData.readString()
-            var aux = Ingrediente(id, newNombre)
+            val aux = Ingrediente(id, newNombre)
             ingredientesRepo.update(aux)
             aux
         } else {
@@ -104,6 +123,11 @@ object KFCController {
         }
     }
 
+    /**
+     * DEPRECATED
+     * @param regexNum Regex
+     * @return Int
+     */
     private fun idPattern(regexNum: Regex): Int {
         var id1: String
         do {
@@ -113,6 +137,10 @@ object KFCController {
         return id1.toInt()
     }
 
+    /**
+     * Actualiza un producto
+     * @return Producto? null si algo falla, el producto si se modifica
+     */
     fun updateProducto(): Producto? {
         println("Introduce nombre de producto a modificar:")
         val name = ReadData.readString()
@@ -143,6 +171,10 @@ object KFCController {
         return null
     }
 
+    /**
+     * elimina un ingrediente
+     * @param aux Producto
+     */
     private fun removeIngrediente(aux: Producto) {
         println("El producto lleva los siguientes ingredientes:")
         aux.showIngredientes()
@@ -158,6 +190,10 @@ object KFCController {
 
     }
 
+    /**
+     * Añade un conjunto de ingredientes al producto aux
+     * @param aux Producto
+     */
     private fun addingrediente(aux: Producto) {
         println("Elige los ingredientes a añadir poniendo sus ID separados por espacios:")
         println(ingredientesRepo.findAll())
@@ -171,17 +207,16 @@ object KFCController {
         aux.addIngrediente(ingredientes)
     }
 
-    private fun listOfIngredientes(ids: List<String>): List<Ingrediente?>? {
+    private fun listOfIngredientes(ids: List<String>): List<Ingrediente?> {
         return ingredientesRepo.findAll(ids)
     }
 
 
     fun addIngrediente() {
         var id: String
-        val name: String
         println("Ingredientes actuales: \n ${ingredientesRepo.findAll()}")
         println("Introduce el nombre del nuevo ingrediente:")
-        name = ReadData.readString()
+        val name: String = ReadData.readString()
         do {
             println("Introduce id (numero entero) del nuevo ingrediente:")
             try {
@@ -211,7 +246,7 @@ object KFCController {
             return null
         } else {
             println("Introduce un precio para el producto:")
-            var precio: Int = -1
+            var precio: Int
             do {
                 precio = ReadData.readNumber()
             } while (precio == -1)
